@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dealerships{% endblock %}
+{% block content %}
+<h1 class="mb-4">Our Dealerships</h1>
+
+{% if error %}<div class="alert alert-warning">{{ error }}</div>{% endif %}
+
+<form class="row g-2 mb-4" method="get" action="{% url 'djangoapp:dealers' %}">
+  <div class="col-md-4">
+    <select class="form-select" name="state">
+      <option value="">All states</option>
+      {% for s in states %}
+        <option value="{{ s }}" {% if s == selected_state %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-primary">Filter</button>
+    <a class="btn btn-outline-secondary" href="{% url 'djangoapp:dealers' %}">Reset</a>
+  </div>
+</form>
+
+{% if dealers %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-dark">
+      <tr><th>ID</th><th>Dealership</th><th>City</th><th>State</th><th>Address</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for d in dealers %}
+      <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.full_name }}</td>
+        <td>{{ d.city }}</td>
+        <td>{{ d.state }}</td>
+        <td>{{ d.address }}, {{ d.zip }}</td>
+        <td><a class="btn btn-sm btn-outline-primary" href="{% url 'djangoapp:dealer_details' d.id %}">Details</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <p class="text-muted">No dealerships found.</p>
+{% endif %}
+{% endblock %}

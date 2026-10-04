@@ -1,0 +1,8 @@
+{
+  "reviews": [
+    {"name":"John Doe","dealership":1,"review":"Fantastic experience, the staff was extremely helpful and the price was fair.","purchase":true,"purchase_date":"2024-03-15","car_make":"Toyota","car_model":"Camry","car_year":2023,"sentiment":"positive"},
+    {"name":"Jane Smith","dealership":1,"review":"Terrible service. Waited three hours and nobody helped me.","purchase":false,"purchase_date":"2024-04-02","car_make":"Honda","car_model":"Civic","car_year":2022,"sentiment":"negative"},
+    {"name":"Bob Johnson","dealership":2,"review":"It was okay. Nothing special but got the job done.","purchase":true,"purchase_date":"2024-02-20","car_make":"Ford","car_model":"F-150","car_year":2024,"sentiment":"neutral"},
+    {"name":"Alice Lee","dealership":3,"review":"Amazing dealership! Highly recommend to anyone looking for an EV.","purchase":true,"purchase_date":"2024-05-01","car_make":"Tesla","car_model":"Model 3","car_year":2024,"sentiment":"positive"}
+  ]
+}

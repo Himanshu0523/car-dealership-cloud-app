@@ -1,0 +1,15 @@
+[
+  {"model": "djangoapp.carmake", "pk": 1, "fields": {"name": "Toyota", "description": "Japanese automaker"}},
+  {"model": "djangoapp.carmake", "pk": 2, "fields": {"name": "Honda", "description": "Japanese automaker"}},
+  {"model": "djangoapp.carmake", "pk": 3, "fields": {"name": "Ford", "description": "American automaker"}},
+  {"model": "djangoapp.carmake", "pk": 4, "fields": {"name": "Tesla", "description": "Electric vehicles"}},
+
+  {"model": "djangoapp.carmodel", "pk": 1, "fields": {"car_make": 1, "name": "Camry", "dealer_id": 1, "type": "SEDAN", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 2, "fields": {"car_make": 1, "name": "RAV4", "dealer_id": 1, "type": "SUV", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 3, "fields": {"car_make": 2, "name": "Civic", "dealer_id": 2, "type": "SEDAN", "year": 2023}},
+  {"model": "djangoapp.carmodel", "pk": 4, "fields": {"car_make": 2, "name": "CR-V", "dealer_id": 2, "type": "SUV", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 5, "fields": {"car_make": 3, "name": "F-150", "dealer_id": 3, "type": "TRUCK", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 6, "fields": {"car_make": 3, "name": "Mustang", "dealer_id": 3, "type": "COUPE", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 7, "fields": {"car_make": 4, "name": "Model 3", "dealer_id": 4, "type": "EV", "year": 2024}},
+  {"model": "djangoapp.carmodel", "pk": 8, "fields": {"car_make": 4, "name": "Model Y", "dealer_id": 4, "type": "EV", "year": 2024}}
+]

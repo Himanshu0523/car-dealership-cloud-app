@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: django }
+  template:
+    metadata:
+      labels: { app: django }
+    spec:
+      containers:
+        - name: django
+          image: ghcr.io/OWNER/REPO/bestcars-django:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_DEBUG
+              value: "False"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "*"
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: secret-key
+            - name: BACKEND_URL
+              value: "http://dealership-api:3030"
+            - name: SENTIMENT_URL
+              value: "http://sentiment:5050"
+          readinessProbe:
+            httpGet: { path: /, port: 8000 }
+            initialDelaySeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django
+spec:
+  selector: { app: django }
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-secrets
+type: Opaque
+stringData:
+  secret-key: "replace-with-a-real-secret"

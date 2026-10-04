@@ -1,0 +1,1 @@
+"""Djangoapp application module."""

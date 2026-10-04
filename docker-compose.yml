@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: bestcars-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  database:
+    build: ./database
+    container_name: bestcars-api
+    restart: unless-stopped
+    environment:
+      PORT: "3030"
+      MONGO_URL: "mongodb://mongo:27017/dealership"
+    ports:
+      - "3030:3030"
+    depends_on:
+      - mongo
+
+  sentiment:
+    build: ./sentiment
+    container_name: bestcars-sentiment
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+
+  server:
+    build: ./server
+    container_name: bestcars-django
+    restart: unless-stopped
+    environment:
+      DJANGO_SECRET_KEY: "change-me-in-prod"
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: "*"
+      BACKEND_URL: "http://database:3030"
+      SENTIMENT_URL: "http://sentiment:5050"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - sentiment
+
+  frontend:
+    build: ./frontend
+    container_name: bestcars-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+
+volumes:
+  mongo-data:

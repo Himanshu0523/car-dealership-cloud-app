@@ -1,0 +1,12 @@
+{
+  "dealerships": [
+    {"id":1,"city":"Austin","state":"Texas","st":"TX","address":"123 Main St","zip":"78701","lat":30.2672,"long":-97.7431,"phone":"+1-512-555-0100","short_name":"Austin Best Cars","full_name":"Best Cars of Austin"},
+    {"id":2,"city":"Dallas","state":"Texas","st":"TX","address":"456 Elm St","zip":"75201","lat":32.7767,"long":-96.7970,"phone":"+1-214-555-0101","short_name":"Dallas Best Cars","full_name":"Best Cars of Dallas"},
+    {"id":3,"city":"San Jose","state":"California","st":"CA","address":"789 Oak Ave","zip":"95110","lat":37.3382,"long":-121.8863,"phone":"+1-408-555-0102","short_name":"San Jose Best Cars","full_name":"Best Cars of San Jose"},
+    {"id":4,"city":"Los Angeles","state":"California","st":"CA","address":"321 Pine Rd","zip":"90001","lat":34.0522,"long":-118.2437,"phone":"+1-213-555-0103","short_name":"LA Best Cars","full_name":"Best Cars of Los Angeles"},
+    {"id":5,"city":"Seattle","state":"Washington","st":"WA","address":"654 Cedar Blvd","zip":"98101","lat":47.6062,"long":-122.3321,"phone":"+1-206-555-0104","short_name":"Seattle Best Cars","full_name":"Best Cars of Seattle"},
+    {"id":6,"city":"Miami","state":"Florida","st":"FL","address":"987 Palm Dr","zip":"33101","lat":25.7617,"long":-80.1918,"phone":"+1-305-555-0105","short_name":"Miami Best Cars","full_name":"Best Cars of Miami"},
+    {"id":7,"city":"New York","state":"New York","st":"NY","address":"159 Broadway","zip":"10001","lat":40.7128,"long":-74.0060,"phone":"+1-212-555-0106","short_name":"NYC Best Cars","full_name":"Best Cars of New York"},
+    {"id":8,"city":"Chicago","state":"Illinois","st":"IL","address":"753 Lake Shore Dr","zip":"60601","lat":41.8781,"long":-87.6298,"phone":"+1-312-555-0107","short_name":"Chicago Best Cars","full_name":"Best Cars of Chicago"}
+  ]
+}
