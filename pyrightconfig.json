@@ -1,0 +1,12 @@
+{
+  "include": [
+    "server",
+    "sentiment"
+  ],
+  "extraPaths": [
+    "server",
+    "server/.venv/Lib/site-packages",
+    "sentiment",
+    "sentiment/.venv/Lib/site-packages"
+  ]
+}
