@@ -7,7 +7,8 @@
 
 <form class="row g-2 mb-4" method="get" action="{% url 'djangoapp:dealers' %}">
   <div class="col-md-4">
-    <select class="form-select" name="state">
+    <label for="state-select" class="visually-hidden">Filter by state</label>
+    <select class="form-select" id="state-select" name="state" aria-label="Filter by state" title="Filter by state">
       <option value="">All states</option>
       {% for s in states %}
         <option value="{{ s }}" {% if s == selected_state %}selected{% endif %}>{{ s }}</option>
@@ -15,7 +16,7 @@
     </select>
   </div>
   <div class="col-auto">
-    <button class="btn btn-primary">Filter</button>
+    <button type="submit" class="btn btn-primary" title="Filter dealerships">Filter</button>
     <a class="btn btn-outline-secondary" href="{% url 'djangoapp:dealers' %}">Reset</a>
   </div>
 </form>

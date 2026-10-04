@@ -10,14 +10,14 @@
         <form method="post" action="{% url 'djangoapp:login' %}">
           {% csrf_token %}
           <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input class="form-control" name="username" required autofocus>
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" name="username" placeholder="Enter username" title="Username" required autofocus>
           </div>
           <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input class="form-control" type="password" name="password" required>
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" id="password" type="password" name="password" placeholder="Enter password" title="Password" required>
           </div>
-          <button class="btn btn-primary w-100">Sign in</button>
+          <button type="submit" class="btn btn-primary w-100" title="Sign in">Sign in</button>
         </form>
         <p class="mt-3 mb-0 text-center small">
           No account? <a href="{% url 'djangoapp:register' %}">Register here</a>

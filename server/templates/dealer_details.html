@@ -49,35 +49,35 @@
     <form id="review-form">
       {% csrf_token %}
       <div class="mb-3">
-        <label class="form-label">Your review</label>
-        <textarea class="form-control" name="review" rows="4" required></textarea>
+        <label for="review-text" class="form-label">Your review</label>
+        <textarea class="form-control" id="review-text" name="review" rows="4" placeholder="Write your review here..." title="Your review" required></textarea>
       </div>
       <div class="row">
         <div class="col-md-3 mb-3">
-          <label class="form-label">Purchased?</label>
-          <select class="form-select" name="purchase">
+          <label for="review-purchase" class="form-label">Purchased?</label>
+          <select class="form-select" id="review-purchase" name="purchase" title="Purchased?">
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
         </div>
         <div class="col-md-3 mb-3">
-          <label class="form-label">Purchase date</label>
-          <input class="form-control" type="date" name="purchase_date">
+          <label for="review-purchase-date" class="form-label">Purchase date</label>
+          <input class="form-control" id="review-purchase-date" type="date" name="purchase_date" title="Purchase date">
         </div>
         <div class="col-md-2 mb-3">
-          <label class="form-label">Make</label>
-          <input class="form-control" name="car_make">
+          <label for="review-car-make" class="form-label">Make</label>
+          <input class="form-control" id="review-car-make" name="car_make" placeholder="e.g. Toyota" title="Car Make">
         </div>
         <div class="col-md-2 mb-3">
-          <label class="form-label">Model</label>
-          <input class="form-control" name="car_model">
+          <label for="review-car-model" class="form-label">Model</label>
+          <input class="form-control" id="review-car-model" name="car_model" placeholder="e.g. Camry" title="Car Model">
         </div>
         <div class="col-md-2 mb-3">
-          <label class="form-label">Year</label>
-          <input class="form-control" type="number" name="car_year" min="1900" max="2100">
+          <label for="review-car-year" class="form-label">Year</label>
+          <input class="form-control" id="review-car-year" type="number" name="car_year" min="1900" max="2100" placeholder="e.g. 2024" title="Car Year">
         </div>
       </div>
-      <button class="btn btn-primary" type="submit">Submit Review</button>
+      <button class="btn btn-primary" type="submit" title="Submit Review">Submit Review</button>
       <span id="review-msg" class="ms-3"></span>
     </form>
   </div>

@@ -13,10 +13,19 @@
   </div>
   <div class="col-md-6">
     <form onsubmit="event.preventDefault(); alert('Thanks! We will get back to you.');">
-      <div class="mb-3"><input class="form-control" placeholder="Your name" required></div>
-      <div class="mb-3"><input class="form-control" type="email" placeholder="Email" required></div>
-      <div class="mb-3"><textarea class="form-control" rows="4" placeholder="Message" required></textarea></div>
-      <button class="btn btn-primary">Send</button>
+      <div class="mb-3">
+        <label for="contact-name" class="form-label">Your name</label>
+        <input class="form-control" id="contact-name" name="name" placeholder="Your name" title="Your name" required>
+      </div>
+      <div class="mb-3">
+        <label for="contact-email" class="form-label">Email</label>
+        <input class="form-control" id="contact-email" type="email" name="email" placeholder="Email" title="Email" required>
+      </div>
+      <div class="mb-3">
+        <label for="contact-message" class="form-label">Message</label>
+        <textarea class="form-control" id="contact-message" name="message" rows="4" placeholder="Message" title="Message" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" title="Send message">Send</button>
     </form>
   </div>
 </div>
