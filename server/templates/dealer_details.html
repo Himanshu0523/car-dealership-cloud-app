@@ -50,7 +50,7 @@
       {% csrf_token %}
       <div class="mb-3">
         <label for="review-text" class="form-label">Your review</label>
-        <textarea class="form-control" id="review-text" name="review" rows="4" placeholder="Write your review here..." title="Your review" required></textarea>
+        <textarea class="form-control" id="review-text" name="review" rows="4" maxlength="2000" placeholder="Write your review here (max 2000 characters)..." title="Your review" required></textarea>
       </div>
       <div class="row">
         <div class="col-md-3 mb-3">
@@ -77,7 +77,7 @@
           <input class="form-control" id="review-car-year" type="number" name="car_year" min="1900" max="2100" placeholder="e.g. 2024" title="Car Year">
         </div>
       </div>
-      <button class="btn btn-primary" type="submit" title="Submit Review">Submit Review</button>
+      <button class="btn btn-primary" type="submit" id="submit-review-btn" title="Submit Review">Submit Review</button>
       <span id="review-msg" class="ms-3"></span>
     </form>
   </div>
@@ -97,6 +97,9 @@ if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const msg = document.getElementById('review-msg');
+    const submitBtn = document.getElementById('submit-review-btn');
+    
+    submitBtn.disabled = true;
     msg.textContent = 'Submitting…';
     msg.className = 'ms-3 text-muted';
 
@@ -116,15 +119,25 @@ if (form) {
         body: JSON.stringify(body),
       });
       const data = await resp.json();
+      
+      if (resp.status === 403) {
+        msg.textContent = 'Session expired. Redirecting to login…';
+        msg.className = 'ms-3 text-warning';
+        setTimeout(() => location.href = "{% url 'djangoapp:login' %}", 1200);
+        return;
+      }
+      
       if (resp.ok) {
         msg.textContent = `Saved (sentiment: ${data.sentiment}). Reloading…`;
         msg.className = 'ms-3 text-success';
         setTimeout(() => location.reload(), 900);
       } else {
+        submitBtn.disabled = false;
         msg.textContent = data.message || 'Failed';
         msg.className = 'ms-3 text-danger';
       }
     } catch (err) {
+      submitBtn.disabled = false;
       msg.textContent = err.message;
       msg.className = 'ms-3 text-danger';
     }
@@ -132,3 +145,4 @@ if (form) {
 }
 </script>
 {% endblock %}
+

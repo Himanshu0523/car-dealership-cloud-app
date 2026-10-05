@@ -4,7 +4,7 @@ const reviewSchema = new mongoose.Schema(
   {
     name: String,
     dealership: { type: Number, index: true },
-    review: String,
+    review: { type: String, maxlength: 2000, required: true },
     purchase: Boolean,
     purchase_date: String,
     car_make: String,

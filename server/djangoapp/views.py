@@ -173,8 +173,13 @@ def dealer_details(request, dealer_id):
     except Exception as exc:  # noqa: BLE001
         error = f"Could not load dealer: {exc}"
 
-    # newest first
-    reviews = sorted(reviews, key=lambda r: r.get("purchase_date", ""), reverse=True)
+    # Mongo already returns reviews sorted newest first (created_at: -1)
+    if isinstance(reviews, list):
+        reviews = sorted(
+            reviews,
+            key=lambda r: r.get("created_at", r.get("purchase_date", "")),
+            reverse=True,
+        )
 
     return render(
         request,
@@ -183,7 +188,6 @@ def dealer_details(request, dealer_id):
     )
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def post_review(request, dealer_id):
     if not request.user.is_authenticated:
@@ -193,6 +197,12 @@ def post_review(request, dealer_id):
     review_text = data.get("review", "").strip()
     if not review_text:
         return JsonResponse({"status": "Failed", "message": "Review text required"}, status=400)
+
+    if len(review_text) > 2000:
+        return JsonResponse(
+            {"status": "Failed", "message": "Review too long (max 2000 characters)"},
+            status=400,
+        )
 
     sentiment = restapis.analyze_review_sentiment(review_text)
 
@@ -214,3 +224,4 @@ def post_review(request, dealer_id):
         return JsonResponse({"status": "Failed", "message": str(exc)}, status=502)
 
     return JsonResponse({"status": "Success", "sentiment": sentiment})
+
