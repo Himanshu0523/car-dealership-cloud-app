@@ -30,12 +30,22 @@ export default function Login({ onSwitch, onSuccess }) {
       <h2>Login</h2>
       {error && <div className="alert error">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <label>Username</label>
-        <input value={username} onChange={(e) => setUsername(e.target.value)} required />
-
-        <label>Password</label>
+        <label htmlFor="login-username">Username</label>
         <input
+          id="login-username"
+          name="username"
+          autoComplete="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <label htmlFor="login-password">Password</label>
+        <input
+          id="login-password"
+          name="password"
           type="password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

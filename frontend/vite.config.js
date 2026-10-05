@@ -6,6 +6,22 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      '/login': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/register': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/logout': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/dealers': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,

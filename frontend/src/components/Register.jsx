@@ -39,23 +39,57 @@ export default function Register({ onSwitch, onSuccess }) {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div>
-            <label>First name</label>
-            <input value={form.firstName} onChange={update('firstName')} />
+            <label htmlFor="reg-first-name">First name</label>
+            <input
+              id="reg-first-name"
+              name="firstName"
+              autoComplete="given-name"
+              value={form.firstName}
+              onChange={update('firstName')}
+            />
           </div>
           <div>
-            <label>Last name</label>
-            <input value={form.lastName} onChange={update('lastName')} />
+            <label htmlFor="reg-last-name">Last name</label>
+            <input
+              id="reg-last-name"
+              name="lastName"
+              autoComplete="family-name"
+              value={form.lastName}
+              onChange={update('lastName')}
+            />
           </div>
         </div>
 
-        <label>Email</label>
-        <input type="email" value={form.email} onChange={update('email')} />
+        <label htmlFor="reg-email">Email</label>
+        <input
+          id="reg-email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          value={form.email}
+          onChange={update('email')}
+        />
 
-        <label>Username</label>
-        <input value={form.username} onChange={update('username')} required />
+        <label htmlFor="reg-username">Username</label>
+        <input
+          id="reg-username"
+          name="username"
+          autoComplete="username"
+          value={form.username}
+          onChange={update('username')}
+          required
+        />
 
-        <label>Password</label>
-        <input type="password" value={form.password} onChange={update('password')} required />
+        <label htmlFor="reg-password">Password</label>
+        <input
+          id="reg-password"
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          value={form.password}
+          onChange={update('password')}
+          required
+        />
 
         <button type="submit" disabled={loading}>
           {loading ? 'Creating…' : 'Register'}
