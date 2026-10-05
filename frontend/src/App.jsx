@@ -1,73 +1,91 @@
 import { useState } from 'react';
+import Navbar from './components/Navbar.jsx';
+import Home from './components/Home.jsx';
+import Dealerships from './components/Dealerships.jsx';
+import About from './components/About.jsx';
+import Contact from './components/Contact.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import { logout } from './api.js';
 
 export default function App() {
-  const [mode, setMode] = useState('login');
+  const [activeTab, setActiveTab] = useState('home');
   const [user, setUser] = useState(null);
 
   async function handleLogout() {
-    await logout();
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     setUser(null);
+    setActiveTab('home');
   }
 
-  if (user) {
-    return (
-      <div className="wrapper">
-        <div className="card dashboard-card">
-          <div className="auth-header">
-            <span className="status-badge">Authenticated</span>
-            <h2>Welcome, {user.firstName || user.userName}!</h2>
-            <p className="user-meta">Signed in as <strong>@{user.userName}</strong></p>
-          </div>
-
-          <div className="next-steps">
-            <h3>Next Steps</h3>
-            <p className="text-sm">You are now authenticated and can post reviews and explore all features.</p>
-            
-            <div className="action-grid">
-              <a href="/dealers/" className="btn-action primary">
-                <span className="icon">🏪</span>
-                <div>
-                  <strong>Browse Dealerships</strong>
-                  <small>View 50-state directory & read reviews</small>
-                </div>
-              </a>
-
-              <a href="/about/" className="btn-action">
-                <span className="icon">ℹ️</span>
-                <div>
-                  <strong>About Best Cars</strong>
-                  <small>Learn about our portal architecture</small>
-                </div>
-              </a>
-
-              <a href="/contact/" className="btn-action">
-                <span className="icon">✉️</span>
-                <div>
-                  <strong>Contact Support</strong>
-                  <small>Reach out to our customer team</small>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div className="card-footer">
-            <button className="btn-logout" onClick={handleLogout}>Sign Out</button>
-          </div>
-        </div>
-      </div>
-    );
+  function handleAuthSuccess(userData) {
+    setUser(userData);
+    setActiveTab('dealers');
   }
 
   return (
-    <div className="wrapper">
-      {mode === 'login' ? (
-        <Login onSwitch={() => setMode('register')} onSuccess={setUser} />
-      ) : (
-        <Register onSwitch={() => setMode('login')} onSuccess={setUser} />
-      )}
+    <div className="app-layout">
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        user={user}
+        onLogout={handleLogout}
+      />
+
+      <main className="main-content">
+        {activeTab === 'home' && (
+          <Home
+            onExploreDealers={() => setActiveTab('dealers')}
+            onLogin={() => setActiveTab('login')}
+            user={user}
+          />
+        )}
+
+        {activeTab === 'dealers' && (
+          <Dealerships
+            user={user}
+            onRequireLogin={() => setActiveTab('login')}
+          />
+        )}
+
+        {activeTab === 'about' && <About />}
+
+        {activeTab === 'contact' && <Contact />}
+
+        {activeTab === 'login' && (
+          <div className="auth-container">
+            <Login
+              onSwitch={() => setActiveTab('register')}
+              onSuccess={handleAuthSuccess}
+            />
+          </div>
+        )}
+
+        {activeTab === 'register' && (
+          <div className="auth-container">
+            <Register
+              onSwitch={() => setActiveTab('login')}
+              onSuccess={handleAuthSuccess}
+            />
+          </div>
+        )}
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-container">
+          <p>© {new Date().getFullYear()} Best Cars Dealership Portal — IBM Full-Stack Capstone Project</p>
+          <div className="footer-links">
+            <button onClick={() => setActiveTab('home')}>Home</button>
+            <button onClick={() => setActiveTab('dealers')}>Dealerships</button>
+            <button onClick={() => setActiveTab('about')}>About</button>
+            <button onClick={() => setActiveTab('contact')}>Contact</button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
