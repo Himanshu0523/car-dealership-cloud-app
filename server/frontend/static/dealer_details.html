@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Dealer Details{% endblock %}
+{% block content %}
+{% if error %}<div class="alert alert-warning">{{ error }}</div>{% endif %}
+
+{% if dealer %}
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="card-title">{{ dealer.full_name }}</h2>
+    <p class="mb-1"><i class="bi bi-geo-alt-fill text-primary"></i>
+      {{ dealer.address }}, {{ dealer.city }}, {{ dealer.state }} {{ dealer.zip }}</p>
+    <p class="mb-1"><i class="bi bi-telephone-fill text-primary"></i> {{ dealer.phone|default:"—" }}</p>
+    <p class="mb-0"><i class="bi bi-geo text-primary"></i> Lat {{ dealer.lat }}, Long {{ dealer.long }}</p>
+  </div>
+</div>
+
+<h3 class="mb-3">Reviews ({{ reviews|length }})</h3>
+
+<div id="review-list" class="mb-5">
+  {% for r in reviews %}
+  <div class="card mb-3 border-start border-4
+      {% if r.sentiment == 'positive' %}border-success{% elif r.sentiment == 'negative' %}border-danger{% else %}border-secondary{% endif %}">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <h6 class="card-subtitle mb-2 text-muted">{{ r.name }}</h6>
+        <small class="text-muted">{{ r.purchase_date }}</small>
+      </div>
+      <p class="card-text">{{ r.review }}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">
+          {% if r.purchase %}<i class="bi bi-bag-check-fill text-success"></i>{% endif %}
+          {{ r.car_make }} {{ r.car_model }} {{ r.car_year }}
+        </small>
+        {% if r.sentiment == 'positive' %}<span class="badge bg-success">Positive</span>
+        {% elif r.sentiment == 'negative' %}<span class="badge bg-danger">Negative</span>
+        {% else %}<span class="badge bg-secondary">Neutral</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">No reviews yet. Be the first!</p>
+  {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="card-title mb-3">Write a Review</h4>
+    <form id="review-form">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="review-text" class="form-label">Your review</label>
+        <textarea class="form-control" id="review-text" name="review" rows="4" maxlength="2000" placeholder="Write your review here (max 2000 characters)..." title="Your review" required></textarea>
+      </div>
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label for="review-purchase" class="form-label">Purchased?</label>
+          <select class="form-select" id="review-purchase" name="purchase" title="Purchased?">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label for="review-purchase-date" class="form-label">Purchase date</label>
+          <input class="form-control" id="review-purchase-date" type="date" name="purchase_date" title="Purchase date">
+        </div>
+        <div class="col-md-2 mb-3">
+          <label for="review-car-make" class="form-label">Make</label>
+          <input class="form-control" id="review-car-make" name="car_make" placeholder="e.g. Toyota" title="Car Make">
+        </div>
+        <div class="col-md-2 mb-3">
+          <label for="review-car-model" class="form-label">Model</label>
+          <input class="form-control" id="review-car-model" name="car_model" placeholder="e.g. Camry" title="Car Model">
+        </div>
+        <div class="col-md-2 mb-3">
+          <label for="review-car-year" class="form-label">Year</label>
+          <input class="form-control" id="review-car-year" type="number" name="car_year" min="1900" max="2100" placeholder="e.g. 2024" title="Car Year">
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" id="submit-review-btn" title="Submit Review">Submit Review</button>
+      <span id="review-msg" class="ms-3"></span>
+    </form>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+  Please <a href="{% url 'djangoapp:login' %}">log in</a> to write a review.
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+const form = document.getElementById('review-form');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('review-msg');
+    const submitBtn = document.getElementById('submit-review-btn');
+    
+    submitBtn.disabled = true;
+    msg.textContent = 'Submitting…';
+    msg.className = 'ms-3 text-muted';
+
+    const fd = new FormData(form);
+    const body = Object.fromEntries(fd.entries());
+    body.purchase = body.purchase === 'true';
+    body.car_year = Number(body.car_year) || 0;
+
+    try {
+      const resp = await fetch("{% url 'djangoapp:post_review' dealer.id %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': fd.get('csrfmiddlewaretoken'),
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
+      });
+      const data = await resp.json();
+      
+      if (resp.status === 403) {
+        msg.textContent = 'Session expired. Redirecting to login…';
+        msg.className = 'ms-3 text-warning';
+        setTimeout(() => location.href = "{% url 'djangoapp:login' %}", 1200);
+        return;
+      }
+      
+      if (resp.ok) {
+        msg.textContent = `Saved (sentiment: ${data.sentiment}). Reloading…`;
+        msg.className = 'ms-3 text-success';
+        setTimeout(() => location.reload(), 900);
+      } else {
+        submitBtn.disabled = false;
+        msg.textContent = data.message || 'Failed';
+        msg.className = 'ms-3 text-danger';
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      msg.textContent = err.message;
+      msg.className = 'ms-3 text-danger';
+    }
+  });
+}
+</script>
+{% endblock %}
+

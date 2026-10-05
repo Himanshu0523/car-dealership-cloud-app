@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Best Cars — Home{% endblock %}
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+  <h1 class="display-5 fw-bold">Welcome to Best Cars Dealership</h1>
+  <p class="lead">Home to the best cars in North America. Browse dealers by state, read reviews, and share your own experience.</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'djangoapp:dealers' %}">Browse Dealerships</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <h5 class="card-title"><i class="bi bi-shop"></i> Nationwide Network</h5>
+      <p class="card-text">Dealerships across all 50 states, with locations, addresses and contact details.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <h5 class="card-title"><i class="bi bi-star-fill"></i> Real Reviews</h5>
+      <p class="card-text">Verified customer reviews with automatic sentiment analysis on every submission.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <h5 class="card-title"><i class="bi bi-cpu"></i> AI-Powered</h5>
+      <p class="card-text">Each review is scored by our sentiment microservice so you can spot trends instantly.</p>
+    </div></div>
+  </div>
+</div>
+{% endblock %}
