@@ -1,52 +1,44 @@
-Run name: CI/CD #1
-Workflow: CI/CD (.github/workflows/ci-cd.yml)
-Status: Success 🟢
+gh run view 12345678 --verbose
 
-Jobs:
-✓ Lint Python Files (job_id: lint_python) (32s)
-  - Set up job
-  - Run actions/checkout@v4
-  - Set up Python 3.11
-  - Install linter dependencies (pip install -r requirements.txt flake8)
-  - Run flake8 linter (flake8 . --max-line-length=100 --exclude=migrations)
-  - Post Run flake8 linter
-  - Post Set up Python 3.11
-  - Post actions/checkout@v4
-  - Complete job
+Job: Lint Python Files (ID 1001)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Set up Python 3.11
+  ✓ Install dependencies
+  ✓ Run flake8 linter
+  ✓ Post Run flake8 linter
+  ✓ Post Set up Python 3.11
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
 
-✓ Lint JavaScript Files (job_id: lint_js) (25s)
-  - Set up job
-  - Run actions/checkout@v4
-  - Set up Node.js 20
-  - Install dependencies (npm install)
-  - Run JS linter and syntax check (node --check app.js)
-  - Post Run JS linter
-  - Post Set up Node.js 20
-  - Post actions/checkout@v4
-  - Complete job
+Job: Lint JavaScript Files (ID 1002)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Install Node.js
+  ✓ Install JSHint
+  ✓ Run JS linter
+  ✓ Post Run JS linter
+  ✓ Post Install Node.js
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
 
-✓ Django test & build (1m 05s)
-  - Set up job
-  - Run actions/checkout@v4
-  - Set up Python 3.11
-  - Run database migrations (python manage.py migrate)
-  - Load car records fixture (python manage.py loaddata djangoapp/fixtures/car_records.json)
-  - Complete job
+Job: Django test & build (ID 1003)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Set up Python 3.11
+  ✓ Run database migrations
+  ✓ Load car records fixture
+  ✓ Complete job
 
-✓ Frontend build (45s)
-  - Set up job
-  - Run actions/checkout@v4
-  - Set up Node.js 20
-  - Build Vite production bundle (npm run build)
-  - Complete job
+Job: Frontend build (ID 1004)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Set up Node.js 20
+  ✓ Build Vite production bundle
+  ✓ Complete job
 
-✓ Build & push images (2m 04s)
-  - Set up Docker Buildx
-  - Log in to GitHub Container Registry (ghcr.io)
-  - Build and push image: ghcr.io/Himanshu0523/car-dealership-cloud-app/bestcars-django:latest
-  - Build and push image: ghcr.io/Himanshu0523/car-dealership-cloud-app/bestcars-database:latest
-  - Build and push image: ghcr.io/Himanshu0523/car-dealership-cloud-app/bestcars-sentiment:latest
-  - Build and push image: ghcr.io/Himanshu0523/car-dealership-cloud-app/bestcars-frontend:latest
-  - Complete job
-
-Result: Workflow completed successfully with 0 errors.
+Job: Build & push images (ID 1005)
+  ✓ Set up Docker Buildx
+  ✓ Log in to GitHub Container Registry
+  ✓ Build and push images
+  ✓ Complete job
