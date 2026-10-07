@@ -1,0 +1,22 @@
+curl http://localhost:8000/djangoapp/get_cars
+
+{
+  "CarModels": [
+    {"CarModel": "Camry", "CarMake": "Toyota"},
+    {"CarModel": "RAV4", "CarMake": "Toyota"},
+    {"CarModel": "Civic", "CarMake": "Honda"},
+    {"CarModel": "CR-V", "CarMake": "Honda"},
+    {"CarModel": "F-150", "CarMake": "Ford"},
+    {"CarModel": "Mustang", "CarMake": "Ford"},
+    {"CarModel": "Model 3", "CarMake": "Tesla"},
+    {"CarModel": "Model Y", "CarMake": "Tesla"},
+    {"CarModel": "Altima", "CarMake": "Nissan"},
+    {"CarModel": "Rogue", "CarMake": "Nissan"},
+    {"CarModel": "Silverado", "CarMake": "Chevrolet"},
+    {"CarModel": "Tahoe", "CarMake": "Chevrolet"},
+    {"CarModel": "3 Series", "CarMake": "BMW"},
+    {"CarModel": "X5", "CarMake": "BMW"},
+    {"CarModel": "A4", "CarMake": "Audi"},
+    {"CarModel": "Q5", "CarMake": "Audi"}
+  ]
+}

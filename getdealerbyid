@@ -1,0 +1,16 @@
+curl http://localhost:3030/fetchDealer/1
+
+{
+  "_id": "607f1f77bcf86cd799439001",
+  "id": 1,
+  "city": "Austin",
+  "state": "Texas",
+  "st": "TX",
+  "address": "123 Main St",
+  "zip": "78701",
+  "lat": 30.2672,
+  "long": -97.7431,
+  "phone": "+1-512-555-0100",
+  "short_name": "Austin Best Cars",
+  "full_name": "Best Cars of Austin"
+}

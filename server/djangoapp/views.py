@@ -1,5 +1,5 @@
 import json
-
+import logging
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -10,6 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from . import restapis
+from .models import CarMake, CarModel
+
+logger = logging.getLogger(__name__)
 
 STATES = [
     "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -69,28 +72,25 @@ def login_view(request):
         return render(request, "Login.html")
 
     data = _payload(request)
-    user = authenticate(
-        request, username=data.get("username"), password=data.get("password")
-    )
+    username = data.get("username") or data.get("userName")
+    password = data.get("password")
+
+    user = authenticate(request, username=username, password=password)
 
     if user is not None:
         auth_login(request, user)
-        if _wants_json(request):
-            return JsonResponse(
-                {
-                    "status": "Authenticated",
-                    "userName": user.username,
-                    "firstName": user.first_name,
-                    "lastName": user.last_name,
-                }
-            )
-        return redirect("djangoapp:index")
-
-    if _wants_json(request):
         return JsonResponse(
-            {"status": "Failed", "message": "Invalid username or password"}, status=401
+            {
+                "status": "Authenticated",
+                "userName": user.username,
+                "firstName": user.first_name,
+                "lastName": user.last_name,
+            }
         )
-    return render(request, "Login.html", {"error": "Invalid username or password"})
+
+    return JsonResponse(
+        {"status": "Failed", "message": "Invalid username or password"}, status=401
+    )
 
 
 @csrf_exempt
@@ -100,11 +100,11 @@ def register(request):
         return render(request, "Register.html")
 
     data = _payload(request)
-    username = data.get("username", "").strip()
+    username = (data.get("username") or data.get("userName") or "").strip()
     password = data.get("password", "")
-    first_name = data.get("firstName", "")
-    last_name = data.get("lastName", "")
-    email = data.get("email", "")
+    first_name = (data.get("firstName") or data.get("first_name") or "").strip()
+    last_name = (data.get("lastName") or data.get("last_name") or "").strip()
+    email = data.get("email", "").strip()
 
     if not username or not password:
         return JsonResponse(
@@ -114,7 +114,8 @@ def register(request):
 
     if User.objects.filter(username=username).exists():
         return JsonResponse(
-            {"status": "Failed", "message": "Username already exists"}, status=409
+            {"status": "Failed", "message": "Username already exists", "error": "Already Registered"},
+            status=409,
         )
 
     user = User.objects.create_user(
@@ -126,27 +127,23 @@ def register(request):
     )
     auth_login(request, user)
 
-    if _wants_json(request):
-        return JsonResponse(
-            {
-                "status": "Authenticated",
-                "userName": user.username,
-                "firstName": user.first_name,
-                "lastName": user.last_name,
-            }
-        )
-    return redirect("djangoapp:index")
+    return JsonResponse(
+        {
+            "status": "Authenticated",
+            "userName": user.username,
+            "firstName": user.first_name,
+            "lastName": user.last_name,
+        }
+    )
 
 
 def logout_view(request):
     auth_logout(request)
-    if _wants_json(request):
-        return JsonResponse({"status": "Logged out"})
-    return redirect("djangoapp:index")
+    return JsonResponse({"userName": "", "status": "Logged out"})
 
 
 # --------------------------------------------------------------------------
-# Dealers
+# Dealers & Reviews (HTML Views)
 # --------------------------------------------------------------------------
 def dealers(request):
     state = request.GET.get("state", "").strip()
@@ -173,7 +170,6 @@ def dealer_details(request, dealer_id):
     except Exception as exc:  # noqa: BLE001
         error = f"Could not load dealer: {exc}"
 
-    # Mongo already returns reviews sorted newest first (created_at: -1)
     if isinstance(reviews, list):
         reviews = sorted(
             reviews,
@@ -188,6 +184,7 @@ def dealer_details(request, dealer_id):
     )
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def post_review(request, dealer_id):
     if not request.user.is_authenticated:
@@ -225,3 +222,44 @@ def post_review(request, dealer_id):
 
     return JsonResponse({"status": "Success", "sentiment": sentiment})
 
+
+# --------------------------------------------------------------------------
+# API Endpoints (cURL & Capstone rubric)
+# --------------------------------------------------------------------------
+def get_cars(request):
+    car_models = CarModel.objects.select_related("car_make").all()
+    cars = []
+    for car in car_models:
+        cars.append({"CarModel": car.name, "CarMake": car.car_make.name})
+    return JsonResponse({"CarModels": cars})
+
+
+def get_dealers_api(request, state=None):
+    if not state:
+        state = request.GET.get("state", "").strip()
+    try:
+        dealers_list = restapis.get_dealers_by_state(state) if state else restapis.get_dealers()
+        return JsonResponse(dealers_list, safe=False)
+    except Exception as exc:  # noqa: BLE001
+        return JsonResponse({"error": str(exc)}, status=500)
+
+
+def get_dealer_by_id_api(request, dealer_id):
+    try:
+        dealer = restapis.get_dealer_details(dealer_id)
+        return JsonResponse(dealer, safe=False)
+    except Exception as exc:  # noqa: BLE001
+        return JsonResponse({"error": str(exc)}, status=500)
+
+
+def get_dealer_reviews_api(request, dealer_id):
+    try:
+        reviews_list = restapis.get_dealer_reviews(dealer_id)
+        return JsonResponse(reviews_list, safe=False)
+    except Exception as exc:  # noqa: BLE001
+        return JsonResponse({"error": str(exc)}, status=500)
+
+
+def analyze_review_api(request, text=""):
+    sentiment = restapis.analyze_review_sentiment(text)
+    return JsonResponse({"sentiment": sentiment, "review": text})

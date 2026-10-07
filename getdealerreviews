@@ -1,0 +1,30 @@
+curl http://localhost:8000/djangoapp/reviews/dealer/1
+
+[
+  {
+    "_id": "6ac630d471d77d80ee0e2d40",
+    "name": "John Doe",
+    "dealership": 1,
+    "review": "Fantastic experience, the staff was extremely helpful and the price was fair.",
+    "purchase": true,
+    "purchase_date": "2024-03-15",
+    "car_make": "Toyota",
+    "car_model": "Camry",
+    "car_year": 2023,
+    "sentiment": "positive",
+    "created_at": "2026-10-07T11:45:24.809Z"
+  },
+  {
+    "_id": "6ac630d471d77d80ee0e2d41",
+    "name": "Jane Smith",
+    "dealership": 1,
+    "review": "Terrible service. Waited three hours and nobody helped me.",
+    "purchase": false,
+    "purchase_date": "2024-04-02",
+    "car_make": "Honda",
+    "car_model": "Civic",
+    "car_year": 2022,
+    "sentiment": "negative",
+    "created_at": "2026-10-07T11:45:24.810Z"
+  }
+]

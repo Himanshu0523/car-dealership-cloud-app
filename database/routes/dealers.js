@@ -12,12 +12,16 @@ router.get('/fetchDealers', async (_req, res) => {
   }
 });
 
-// GET dealers by state
+// GET dealers by state (matches full state name or abbreviation, case-insensitive)
 router.get('/fetchDealers/:state', async (req, res) => {
   try {
-    const dealers = await Dealership.find({ state: req.params.state })
-      .sort({ id: 1 })
-      .lean();
+    const stateParam = req.params.state;
+    const dealers = await Dealership.find({
+      $or: [
+        { state: new RegExp('^' + stateParam + '$', 'i') },
+        { st: new RegExp('^' + stateParam + '$', 'i') }
+      ]
+    }).sort({ id: 1 }).lean();
     res.json(dealers);
   } catch (err) {
     res.status(500).json({ error: err.message });

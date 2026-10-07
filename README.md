@@ -1,4 +1,5 @@
-# Best Cars Dealership Portal
+# Repository Name: car-dealership-cloud-app
+# Project Name: Dealership Cloud Application (Best Cars Dealership Portal)
 
 A multi-tier cloud-native car dealership web application with sentiment analysis, containerized with Docker and ready for Kubernetes deployment.
 

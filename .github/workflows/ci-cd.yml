@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  django:
-    name: Django (lint + test)
+  lint_python:
+    name: Lint Python Files
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,13 +20,9 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt flake8
       - run: flake8 . --max-line-length=100 --exclude=migrations
-      - run: python manage.py makemigrations --check --dry-run
-      - run: python manage.py migrate
-      - run: python manage.py loaddata djangoapp/fixtures/car_records.json
-      - run: python manage.py check --deploy || true
 
-  node:
-    name: Node service
+  lint_js:
+    name: Lint JavaScript Files
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -39,19 +35,22 @@ jobs:
       - run: npm install
       - run: node --check app.js
 
-  sentiment:
-    name: Sentiment service
+  django:
+    name: Django test & build
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: sentiment
+        working-directory: server
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt
-      - run: python -c "import app; print('import ok')"
+      - run: python manage.py makemigrations --check --dry-run
+      - run: python manage.py migrate
+      - run: python manage.py loaddata djangoapp/fixtures/car_records.json
+      - run: python manage.py check --deploy || true
 
   frontend:
     name: Frontend build
@@ -69,7 +68,7 @@ jobs:
 
   docker:
     name: Build & push images
-    needs: [django, node, sentiment, frontend]
+    needs: [lint_python, lint_js, django, frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:

@@ -1,0 +1,18 @@
+curl http://localhost:3030/fetchDealers/Kansas
+
+[
+  {
+    "_id": "607f1f77bcf86cd799439009",
+    "id": 9,
+    "city": "Wichita",
+    "state": "Kansas",
+    "st": "KS",
+    "address": "100 Douglas Ave",
+    "zip": "67202",
+    "lat": 37.6872,
+    "long": -97.3301,
+    "phone": "+1-316-555-0108",
+    "short_name": "Kansas Best Cars",
+    "full_name": "Best Cars of Kansas"
+  }
+]
